@@ -1,0 +1,47 @@
+<head>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD29P9EOBYU5jdFup0BCzUlizjyzncYS38&libraries=places&sensor=false"></script>
+
+<link rel="stylesheet" type="text/css" href="/assets/events.css.scss"/>
+
+</head>
+
+<body>
+
+    <%= javascript_tag do %>
+  window.events = <%=raw Event.all.to_json %>;
+<% end %>
+
+<%= form_for :event, url: events_path do |f| %>
+    <p>
+        <%= f.label      :name %><br>
+        <%= f.text_field :name %>
+    </p>
+    <p>
+        <%= f.label     :description %><br>
+        <%= f.text_area :description %>
+    </p>
+
+    <%= hidden_field_tag :creator_id, params[:creator_id] %>
+
+    <%= hidden_field_tag :lat, params[:lat] %>
+    <%= hidden_field_tag :lon, params[:lon] %>
+
+
+    <p>Please select location on map!</p>
+
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+
+<div id="right">
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="googleMap"></div>
+</div>
+
+<script src="/assets/events.js?body=1"></script>
+
+
+</body>
+
+<!-- Look at the javascript console on localhost. Just make a hidden field, and then use javascript to edit the lat lon values as you select. Somehow prevent the submit button from becoming active until a name is given, a location is set, etc.etc. -->

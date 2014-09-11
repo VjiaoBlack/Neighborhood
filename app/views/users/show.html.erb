@@ -1,0 +1,11 @@
+<%= @user.name %>
+<% @events.each do |event| %>
+<hr/>
+    <p><%= event.name %></p>
+    <p><%= event.description %></p>
+    <p><%= event.id %></p>
+<hr/>
+<% end %>
+
+<br/>
+<%= link_to "home", root_path %>

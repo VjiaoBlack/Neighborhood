@@ -1,0 +1,32 @@
+<h1>Welcome to Neighbors</h1>
+
+
+
+<% if session[:user_id] %>
+  <% if User.where(:id => session[:user_id]).blank? %>
+   <script type="text/javascript">
+    window.location.href="/logout"  // put your correct path in a string here
+   </script>
+  <% else %>
+
+    <h2>Welcome, <%= User.find(session[:user_id])[:name] %>!</h2>
+  <% end %>
+<% end %>
+
+
+<%= link_to "register", new_user_path %>
+
+<%= link_to "login", "/signin" %>
+
+<% if session[:user_id] %>
+    <%= link_to "logout", "/logout" %>
+<% end %>
+
+<% if session[:user_id] %>
+    <%= link_to "make events", new_event_path(creator_id: session[:user_id]) %>
+<% end %>
+<%= link_to "view events", controller: 'events', action: 'index' %>
+
+<% if session[:user_id] %>
+    <%= link_to "you + your events", user_path(session[:user_id]) %>
+<% end %>

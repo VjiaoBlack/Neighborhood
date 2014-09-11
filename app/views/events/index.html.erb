@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<head>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyD29P9EOBYU5jdFup0BCzUlizjyzncYS38&libraries=places&sensor=false"></script>
+<link rel="stylesheet" type="text/css" href="/assets/events.css.scss"/>
+</head>
+
+<body>
+    <div id="left">
+<h1>Do some google maps api shit here.</h1>
+
+<%= javascript_tag do %>
+  window.events = <%=raw Event.all.to_json %>;
+<% end %>
+
+
+<% @events.each do |event| %>
+<hr/>
+    <p><%= event.name %>|<%= event.description %>|<%= User.find(event.user_id).name %></p>
+</hr>
+<% end %>
+
+</div>
+
+<div id="right">
+    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="googleMap"></div>
+</div>
+<script src="/assets/events.js?body=1"></script>
+
+</body>
+</html>
