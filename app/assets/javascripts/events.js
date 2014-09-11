@@ -6,16 +6,71 @@
 // is probably because you have denied permission for location sharing.
 
 var map;
+var geocoder;
+var ans;
+
+function refresh() {
+    var i;
+    for (i = 0; i < window.events.length; i++) {
+        (function(i){
+            setTimeout(function() {
+                console.log(i);
+                document.getElementById(i + ",p").innerHTML = coordToName(window.events[i].lat,window.events[i].lon);
+                console.log(coordToName(window.events[i].lat,window.events[i].lon));
+                console.log(window.events[i].lat);
+                console.log(window.events[i].lon);
+                window.eventmarkers[i].setMap(map);
+            }, (i) * 200);
+        })(i);
+    }
+}
+
+
+function geo(results, status, ans) {
+    if (status == google.maps.GeocoderStatus.OK) {
+
+      if (results[1]) {
+        window.ans =  results[1].formatted_address;
+
+      } else {
+        window.ans =  "(Address not found)";
+      }
+    } else {
+      window.ans =  "status not OK";
+    }
+
+  }
+function coordToName(lat, lng) {
+  var latlng = new google.maps.LatLng(lat, lng);
+
+  console.log(latlng);
+  geocoder.geocode({'latLng': latlng}, geo);
+  return ans;
+}
+
+function highlight(element) {
+    window.eventmarkers[element.id].setIcon("http://maps.google.com/mapfiles/ms/icons/blue.png");
+    window.eventmarkers[element.id].setMap(map);
+}
+
+function unhighlight(element) {
+    window.eventmarkers[element.id].setIcon("http://maps.google.com/mapfiles/ms/icons/red.png");
+    window.eventmarkers[element.id].setMap(map);
+}
+
 
 // document.location;
 
 function initialize() {
-    var events = [];
+
+    window.eventmarkers = [];
     var markers = [];
     var mapOptions = {
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         zoom: 13
     };
+    geocoder = new google.maps.Geocoder();
+
     map = new google.maps.Map(document.getElementById('googleMap'), mapOptions);
 
     // var defaultBounds;// = new google.maps.LatLngBounds(
@@ -24,17 +79,18 @@ function initialize() {
     // map.fitBounds(defaultBounds);
 
     // Try HTML5 geolocation
+
     if (window.events) {
         var i;
         for (i = 0; i < window.events.length; i++) {
-            var pos = new google.maps.LatLng(window.events[i].lat,
-                                           window.events[i].lon);
-            var evt = new google.maps.Marker({
+            var pos = new google.maps.LatLng(window.events[i].lat,window.events[i].lon);
+            window.eventmarkers[i] = new google.maps.Marker({
+                map: map,
                 position: pos,
-                title:window.events[i].name
+                title:window.events[i].name,
+                icon:"http://maps.google.com/mapfiles/ms/icons/red.png"
             });
 
-            evt.setMap(map);
         }
     }
 
@@ -59,10 +115,10 @@ function initialize() {
         });
         google.maps.event.addListener(document.locat, "dragend", function(event) {
 
-           var point = document.locat.getPosition();
-           document.getElementById("lon").value = event.latLng.lng();
-           document.getElementById("lat").value = event.latLng.lat();
-           console.log(event.latLng.lng().toFixed(6));
+            var point = document.locat.getPosition();
+            document.getElementById("lon").value = event.latLng.lng();
+            document.getElementById("lat").value = event.latLng.lat();
+            console.log(event.latLng.lng().toFixed(6));
 
         });
 

@@ -1,6 +1,8 @@
 class EventsController < ApplicationController
     def index
         @events = Event.all
+        @minid = Event.minimum(:id)
+
     end
 
     def new
@@ -13,6 +15,8 @@ class EventsController < ApplicationController
         @event.description = params[:event][:description]
         @event.lat = params[:lat]
         @event.lon = params[:lon]
+
+        @minid = Event.minimum(:id)
 
         @event.save
         if @event.save

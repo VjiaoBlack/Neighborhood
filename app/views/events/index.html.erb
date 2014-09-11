@@ -12,11 +12,12 @@
   window.events = <%=raw Event.all.to_json %>;
 <% end %>
 
-
+<button onclick="refresh()">refresh</button>
 <% @events.each do |event| %>
-<hr/>
+<div class="event" onmouseover="highlight(this)" onmouseout="unhighlight(this)" id="<%= event.id - @minid %>">
     <p><%= event.name %>|<%= event.description %>|<%= User.find(event.user_id).name %></p>
-</hr>
+    <p id="<%= event.id - @minid %>,p">test</p>
+</div>
 <% end %>
 
 </div>
